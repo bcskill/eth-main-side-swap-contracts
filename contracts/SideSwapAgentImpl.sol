@@ -2,7 +2,6 @@ pragma solidity 0.6.4;
 
 import "./interfaces/ISwap.sol";
 import "./interfaces/IERC20Query.sol";
-import "./bep20/BEP20UpgradeableProxy.sol";
 import './interfaces/IProxyInitialize.sol';
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "openzeppelin-solidity/contracts/proxy/Initializable.sol";

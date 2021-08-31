@@ -15,7 +15,7 @@
     "lint:js": "eslint test/**/*.js",
     "lint:sol:fix": "solium -d contracts/ --fix",
     "lint:sol": "solium -d contracts/",
-    "flatten": "truffle-flattener contracts/SideSwapAgentImpl.sol > flattened/SideSwapAgentImpl.sol && truffle-flattener contracts/SideSwapAgentUpgradeableProxy.sol > flattened/SideSwapAgentUpgradeableProxy.sol && truffle-flattener contracts/MainSwapAgentUpgradeableProxy.sol > flattened/MainSwapAgentUpgradeableProxy.sol && truffle-flattener contracts/MainSwapAgentImpl.sol > flattened/MainSwapAgentImpl.sol",
+    "flatten": "truffle-flattener contracts/SideSwapAgentImpl.sol > flattened/SideSwapAgentImpl.sol && truffle-flattener contracts/SideSwapAgentUpgradeableProxy.sol > flattened/SideSwapAgentUpgradeableProxy.sol && truffle-flattener contracts/MainSwapAgentUpgradeableProxy.sol > flattened/MainSwapAgentUpgradeableProxy.sol && truffle-flattener contracts/MainSwapAgentImpl.sol > flattened/MainSwapAgentImpl.sol"
   },
   "author": "",
   "license": "MIT",
