@@ -23,7 +23,7 @@ contract  SideSwapAgentImpl is Context, Initializable {
 
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
     event SwapPairCreatedEvent(bytes32 indexed mainChainTxHash, address indexed mainChainErc20Addr, address indexed sideChainErc20Addr, string name, string symbol, uint8 decimals);
-    event SwapSide2MainEvent(address indexed sideChainErc20Addr, address indexed mainChainErc20Addr, address indexed fromAddr, uint256 amount, uint256 feeAmount);
+    event SwapSide2MainEvent(address indexed sponsor, address indexed sideChainErc20Addr, address indexed mainChainErc20Addr, address mainChainToAddr, uint256 amount, uint256 feeAmount);
     event SwapMain2SideFilledEvent(bytes32 indexed mainChainTxHash, address indexed mainChainErc20Addr, address indexed sideChainToAddr, uint256 amount);
     event RechargeEvent(address indexed sideChainErc20Addr, address indexed sendAddr, uint256 amount);
 
@@ -96,15 +96,16 @@ contract  SideSwapAgentImpl is Context, Initializable {
         return true;
     }
  
-    function swapSide2Main(address sideChainErc20Addr, uint256 amount) payable external notContract returns (bool) {
+    function swapSide2Main(address sideChainErc20Addr, address mainChainToAddr, uint256 amount) payable external notContract returns (bool) {
         address mainChainErc20Addr = swapMappingSide2Main[sideChainErc20Addr];
         require(mainChainErc20Addr != address(0x0), "no swap pair for this token");
+        require(mainChainToAddr != address(0x0), "mainChainToAddr is error");
         require(msg.value == swapFee, "swap fee not equal");
 
         IERC20(sideChainErc20Addr).transferFrom(msg.sender, address(this), amount);
         sideChainErc20Banlance[sideChainErc20Addr] = sideChainErc20Banlance[sideChainErc20Addr].add(amount);
 
-        emit SwapSide2MainEvent(sideChainErc20Addr, mainChainErc20Addr, msg.sender, amount, msg.value);
+        emit SwapSide2MainEvent(msg.sender, sideChainErc20Addr, mainChainErc20Addr, mainChainToAddr, amount, msg.value);
         return true;
     }
 

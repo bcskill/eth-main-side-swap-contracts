@@ -18,8 +18,8 @@ contract MainSwapAgentImpl is Context, Initializable {
     uint256 public swapFee;
 
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-    event SwapPairRegisterEvent(address indexed sponsor,address indexed mainChainErc20Addr, address indexed sideChainFromAddr, string name, string symbol, uint8 decimals);
-    event SwapMain2SideEvent(address indexed mainChainErc20Addr, address indexed sideChainErc20Addr, address indexed sideChainFromAddr, uint256 amount, uint256 feeAmount);
+    event SwapPairRegisterEvent(address indexed sponsor, address indexed mainChainErc20Addr, address indexed sideChainFromAddr, string name, string symbol, uint8 decimals);
+    event SwapMain2SideEvent(address indexed sponsor, address indexed mainChainErc20Addr, address indexed sideChainErc20Addr, address sideChainToAddr, uint256 amount, uint256 feeAmount);
     event SwapSide2MainFilledEvent(address indexed mainChainErc20Addr, bytes32 indexed sideChainTxHash, address indexed mainChainToAddr, uint256 amount);
     event RechargeEvent(address indexed mainChainErc20Addr, address indexed sendAddr, uint256 amount);
 
@@ -96,9 +96,10 @@ contract MainSwapAgentImpl is Context, Initializable {
         return true;
     }
 
-    function swapMain2Side(address mainChainErc20Addr, uint256 amount) payable external notContract returns (bool) {
+    function swapMain2Side(address mainChainErc20Addr, address sideChainToAddr, uint256 amount) payable external notContract returns (bool) {
         address sideChainErc20Addr = swapMappingMain2Side[mainChainErc20Addr];
         require(sideChainErc20Addr != address(0x0), "no swap pair for this token");
+        require(sideChainToAddr != address(0x0), "sideChainToAddr is error");
         require(amount > 0, "The recharge amount is too small");
         require(IERC20(mainChainErc20Addr).balanceOf(msg.sender) >= amount, "Insufficient contract account balance");
         require(msg.value == swapFee, "swap fee not equal");
@@ -109,7 +110,7 @@ contract MainSwapAgentImpl is Context, Initializable {
             owner.transfer(msg.value);
         }
 
-        emit SwapMain2SideEvent(mainChainErc20Addr, sideChainErc20Addr, msg.sender, amount, msg.value);
+        emit SwapMain2SideEvent(msg.sender, mainChainErc20Addr, sideChainErc20Addr, sideChainToAddr, amount, msg.value);
         return true;
     }
 }
