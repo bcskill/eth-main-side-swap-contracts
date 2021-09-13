@@ -23,7 +23,7 @@ contract  SideSwapAgentImpl is Context, Initializable {
 
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
     event SwapPairCreatedEvent(bytes32 indexed mainChainTxHash, address indexed mainChainErc20Addr, address indexed sideChainErc20Addr, string name, string symbol, uint8 decimals);
-    event SwapSide2MainEvent(address indexed sponsor, address indexed sideChainErc20Addr, address indexed mainChainErc20Addr, address mainChainToAddr, uint256 amount, uint256 feeAmount);
+    event SwapSide2MainEvent(address indexed sponsor, address indexed sideChainErc20Addr, address mainChainToAddr, uint256 amount, uint256 feeAmount);
     event SwapMain2SideFilledEvent(bytes32 indexed mainChainTxHash, address indexed mainChainErc20Addr, address indexed sideChainToAddr, uint256 amount);
     event RechargeEvent(address indexed sideChainErc20Addr, address indexed sendAddr, uint256 amount);
 
@@ -105,7 +105,7 @@ contract  SideSwapAgentImpl is Context, Initializable {
         IERC20(sideChainErc20Addr).transferFrom(msg.sender, address(this), amount);
         sideChainErc20Banlance[sideChainErc20Addr] = sideChainErc20Banlance[sideChainErc20Addr].add(amount);
 
-        emit SwapSide2MainEvent(msg.sender, sideChainErc20Addr, mainChainErc20Addr, mainChainToAddr, amount, msg.value);
+        emit SwapSide2MainEvent(msg.sender, sideChainErc20Addr, mainChainToAddr, amount, msg.value);
         return true;
     }
 

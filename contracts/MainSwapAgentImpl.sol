@@ -19,7 +19,7 @@ contract MainSwapAgentImpl is Context, Initializable {
 
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
     event SwapPairRegisterEvent(address indexed sponsor, address indexed mainChainErc20Addr, address indexed sideChainErc20Addr, string name, string symbol, uint8 decimals);
-    event SwapMain2SideEvent(address indexed sponsor, address indexed mainChainErc20Addr, address indexed sideChainErc20Addr, address sideChainToAddr, uint256 amount, uint256 feeAmount);
+    event SwapMain2SideEvent(address indexed sponsor, address indexed mainChainErc20Addr, address sideChainToAddr, uint256 amount, uint256 feeAmount);
     event SwapSide2MainFilledEvent(address indexed mainChainErc20Addr, bytes32 indexed sideChainTxHash, address indexed mainChainToAddr, uint256 amount);
     event RechargeEvent(address indexed mainChainErc20Addr, address indexed sendAddr, uint256 amount);
 
@@ -110,7 +110,7 @@ contract MainSwapAgentImpl is Context, Initializable {
             owner.transfer(msg.value);
         }
 
-        emit SwapMain2SideEvent(msg.sender, mainChainErc20Addr, sideChainErc20Addr, sideChainToAddr, amount, msg.value);
+        emit SwapMain2SideEvent(msg.sender, mainChainErc20Addr, sideChainToAddr, amount, msg.value);
         return true;
     }
 }
