@@ -17,6 +17,7 @@ contract  SideSwapAgentImpl is Context, Initializable {
     mapping(bytes32 => bool) public filledMainTx;
     mapping(bytes32 => bool) public createSwapPairTx;
     mapping(address => uint256) public sideChainErc20Banlance;
+    mapping(address => uint256) public IbcErc20Banlance;
 
     address payable public owner;
     uint256 public swapFee;
@@ -75,7 +76,8 @@ contract  SideSwapAgentImpl is Context, Initializable {
         swapMappingMain2Side[mainChainErc20Addr] = sideChainErc20Addr;
         swapMappingSide2Main[sideChainErc20Addr] = mainChainErc20Addr;
         createSwapPairTx[mainChainTxHash] = true;
-        sideChainErc20Banlance[sideChainErc20Addr] = 0; 
+        sideChainErc20Banlance[sideChainErc20Addr] = 0;
+        IbcErc20Banlance[sideChainErc20Addr] = 0;
 
         emit SwapPairCreatedEvent(mainChainTxHash, mainChainErc20Addr, sideChainErc20Addr, name, symbol, decimals);
         return true;
@@ -91,6 +93,7 @@ contract  SideSwapAgentImpl is Context, Initializable {
         IERC20(sideChainErc20Addr).transfer(sideChainToAddr, amount);
         filledMainTx[mainChainTxHash] = true;
         sideChainErc20Banlance[sideChainErc20Addr] = sideChainErc20Banlance[sideChainErc20Addr].sub(amount);
+        IbcErc20Banlance[sideChainErc20Addr] = IbcErc20Banlance[sideChainErc20Addr].add(amount);
 
         emit SwapMain2SideFilledEvent(mainChainTxHash, sideChainErc20Addr, sideChainToAddr, amount);
         return true;
@@ -101,9 +104,12 @@ contract  SideSwapAgentImpl is Context, Initializable {
         require(mainChainErc20Addr != address(0x0), "no swap pair for this token");
         require(mainChainToAddr != address(0x0), "mainChainToAddr is error");
         require(msg.value == swapFee, "swap fee not equal");
+        require(IERC20(sideChainErc20Addr).balanceOf(msg.sender) >= amount &&
+            IbcErc20Banlance[sideChainErc20Addr] >= amount, "Insufficient contract account balance");
 
         IERC20(sideChainErc20Addr).transferFrom(msg.sender, address(this), amount);
         sideChainErc20Banlance[sideChainErc20Addr] = sideChainErc20Banlance[sideChainErc20Addr].add(amount);
+        IbcErc20Banlance[sideChainErc20Addr] = IbcErc20Banlance[sideChainErc20Addr].sub(amount);
 
         emit SwapSide2MainEvent(msg.sender, sideChainErc20Addr, mainChainToAddr, amount, msg.value);
         return true;
