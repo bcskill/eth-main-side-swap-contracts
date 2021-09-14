@@ -23,7 +23,7 @@ contract  SideSwapAgentImpl is Context, Initializable {
 
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
     event SwapPairCreatedEvent(bytes32 indexed mainChainTxHash, address indexed mainChainErc20Addr, address indexed sideChainErc20Addr, string name, string symbol, uint8 decimals);
-    event SwapSide2MainEvent(address indexed sponsor, address indexed sideChainErc20Addr, address mainChainToAddr, uint256 amount, uint256 feeAmount);
+    event SwapSide2MainEvent(address indexed sponsor, address indexed sideChainErc20Addr, address indexed mainChainToAddr, uint256 amount, uint256 feeAmount);
     event SwapMain2SideFilledEvent(bytes32 indexed mainChainTxHash, address indexed mainChainErc20Addr, address indexed sideChainToAddr, uint256 amount);
     event RechargeEvent(address indexed sideChainErc20Addr, address indexed sendAddr, uint256 amount);
 

@@ -19,7 +19,7 @@ contract MainSwapAgentImpl is Context, Initializable {
 
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
     event SwapPairRegisterEvent(address indexed sponsor, address indexed mainChainErc20Addr, address indexed sideChainErc20Addr, string name, string symbol, uint8 decimals);
-    event SwapMain2SideEvent(address indexed sponsor, address indexed mainChainErc20Addr, address sideChainToAddr, uint256 amount, uint256 feeAmount);
+    event SwapMain2SideEvent(address indexed sponsor, address indexed mainChainErc20Addr, address indexed sideChainToAddr, uint256 amount, uint256 feeAmount);
     event SwapSide2MainFilledEvent(address indexed mainChainErc20Addr, bytes32 indexed sideChainTxHash, address indexed mainChainToAddr, uint256 amount);
     event RechargeEvent(address indexed mainChainErc20Addr, address indexed sendAddr, uint256 amount);
 
@@ -83,7 +83,7 @@ contract MainSwapAgentImpl is Context, Initializable {
 
     function fillSide2MainSwap(bytes32 sideChainTxHash, address sideChainErc20Addr, address mainChainToAddr, uint256 amount) onlyOwner external returns (bool) {
         require(!filledSideTx[sideChainTxHash], "side tx filled already");
-        address mainChainErc20Addr = swapMappingMain2Side[sideChainErc20Addr];
+        address mainChainErc20Addr = swapMappingSide2Main[sideChainErc20Addr];
         require(mainChainErc20Addr != address(0x0), "no swap pair for this token");
         require(IERC20(mainChainErc20Addr).balanceOf(address(this)) >= amount &&
             mainChainErc20Banlance[mainChainErc20Addr] >= amount, "Insufficient contract account balance");
