@@ -58,3 +58,12 @@ Run coverage:
 ```javascript
 npm run coverage
 ```
+
+```javascript
+solc --bin ./SideSwapAgentImpl.sol > SideSwapAgent.bin
+solc --abi ./SideSwapAgentImpl.sol > SideSwapAgent.abi
+abigen --bin=SideSwapAgent.bin --abi=SideSwapAgent.abi --pkg=SideSwapAgent --out=SideSwapAgent.go
+solc --bin ./MainSwapAgentImpl.sol > MainSwapAgent.bin
+solc --abi ./MainSwapAgentImpl.sol > MainSwapAgent.abi
+abigen --bin=MainSwapAgent.bin --abi=MainSwapAgent.abi --pkg=MainSwapAgent --out=MainSwapAgent.go
+```
